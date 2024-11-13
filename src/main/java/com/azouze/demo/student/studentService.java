@@ -30,4 +30,12 @@ public class studentService {
     public void Deletestudent( Long id ) {
         studentRepository.deleteById( id);
     };
+    public void updateStudent(Long id, student student) {
+        student existingStudent = studentRepository.findById(id) .orElseThrow(() -> new IllegalStateException("student with id " + id + " does not exist."));
+        if (studentRepository.findByEmail(student.getEmail()).isPresent() && !existingStudent.getEmail().equals(student.getEmail()))
+        { throw new IllegalStateException("Email already in use."); }
+        existingStudent.setName(student.getName());
+        existingStudent.setEmail(student.getEmail());
+        existingStudent.setBirthday(student.getBirthday());
+        studentRepository.save(existingStudent); }
 }
